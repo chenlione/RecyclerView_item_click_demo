@@ -90,6 +90,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
         notifyItemChanged(position);
     }
 
+    /**不同的条目
+     * @param position
+     * @return
+     */
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView text;
