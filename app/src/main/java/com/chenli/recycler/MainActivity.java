@@ -25,28 +25,39 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.Onchild
         recycler = (RecyclerView) findViewById(R.id.recycler);
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            list.add(String.format(Locale.CHINA,"第%09d条数据%s",i,i%2==0?"":"------------------"));
+//            list.add(String.format(Locale.CHINA, "第%09d条数据%s", i, i % 2 == 0 ? "" : "------------------"));
+            list.add(String.format(Locale.CHINA, "第%09d条数据", i));
         }
-        adapter = new MyAdapter(this,list);
+        adapter = new MyAdapter(this, list);
         recycler.setAdapter(adapter);
 
         //设置RecyclerView的布局样式
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,true);
-        GridLayoutManager   gridLayoutManager   = new GridLayoutManager(this, 3,GridLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager   gridLayoutManager   = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (position == 0){
+                if (position == 0) {
                     return 3;
                 }
-                if (position == 2){
+                if (position == 2) {
                     return 2;
                 }
                 return 1;
             }
         });
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        recycler.setLayoutManager(staggeredGridLayoutManager);
+        //动画系统
+//        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        MyItemAnimator animator = new MyItemAnimator();
+        animator.setSupportsChangeAnimations(true);//默认不支持
+//        animator.setRemoveDuration(3000);
+//        animator.setMoveDuration(3000);
+//        animator.setAddDuration(3000);
+        animator.setChangeDuration(3000);
+        recycler.setItemAnimator(animator);
+
+        recycler.setLayoutManager(linearLayoutManager);
 
         adapter.setOnchildClickListener(this);
     }
@@ -54,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.Onchild
     @Override
     public void onChildClick(RecyclerView parent, View view, int position, String data) {
         Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-        adapter.remove(position);
+//        adapter.remove(position);
+//        adapter.add(position,"新增加的数据");
+        adapter.change(position,"新增加的数据");
     }
 }
